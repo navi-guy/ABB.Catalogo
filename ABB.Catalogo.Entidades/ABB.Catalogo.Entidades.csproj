@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Base\BaseLN.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Core\Categoria.cs" />
     <Compile Include="Core\Producto.cs" />
     <Compile Include="Core\Rol.cs" />
     <Compile Include="Core\Stock.cs" />

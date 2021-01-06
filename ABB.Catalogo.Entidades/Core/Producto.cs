@@ -9,9 +9,15 @@ namespace ABB.Catalogo.Entidades.Core
     public class Producto
     {
         public int IdProducto { get; set; }
-        public int StockItems { get; set; }
-        public int PuntoRepo { get; set; }
-        public float PrecioVenta { get; set; }
+        public int IdCategoria { get; set; }
+        public string NomProducto { get; set; }
+        public string MarcaProducto { get; set; }
+        public string ModeloProducto { get; set; }
+        public string LineaProducto { get; set; }
+        public string GarantiaProducto { get; set; }
+        public decimal Precio { get; set; }
+        public byte[] Imagen { get; set; }
+        public string DescripcionTecnica { get; set; }
 
     }
 }

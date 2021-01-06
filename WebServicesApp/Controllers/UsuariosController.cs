@@ -40,20 +40,42 @@ namespace WebServicesApp.Controllers
 
         }
 
-
         // POST: api/Usuarios
-        public void Post([FromBody]string value)
+        public void Post([FromBody] Usuario value)
         {
+            Usuario usuario = new UsuariosLN().InsertarUsuario(value);
         }
 
         // PUT: api/Usuarios/5
-        public void Put(int id, [FromBody]string value)
+        public Usuario Put(int id, [FromBody]Usuario value)
         {
+            Usuario usuario = new Usuario();
+            usuario = new UsuariosLN().ModificarUsuario(id, value);
+            return usuario;
         }
+
 
         // DELETE: api/Usuarios/5
         public void Delete(int id)
         {
+            new UsuariosLN().EliminarUsuario(id);
         }
+
+        public Usuario GetUserId([FromUri] int IdUsuario)
+        {
+            try
+            {
+                UsuariosLN usuario = new UsuariosLN();
+                return usuario.BuscaUsuarioId(IdUsuario);
+            }
+            catch (Exception ex)
+            {
+                string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
+                //Logger.paginaNombre = this.GetType().Name;
+                //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
+                throw;
+            }
+        }
+
     }
 }

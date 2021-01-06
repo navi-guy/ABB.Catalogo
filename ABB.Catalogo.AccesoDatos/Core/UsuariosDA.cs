@@ -114,6 +114,102 @@ namespace ABB.Catalogo.AccesoDatos.Core
             }
         }
 
+        public Usuario InsertarUsuario(Usuario usuario)
+        {
+            byte[] UserPass = EncriptacionHelper.EncriptarByte(usuario.ClaveTxt);
+            usuario.Clave = UserPass;
+
+            using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
+            {
+                using (SqlCommand comando = new SqlCommand("paUsuario_insertar", conexion))
+                {
+                    comando.CommandType = System.Data.CommandType.StoredProcedure;
+                    comando.Parameters.AddWithValue("@Clave", usuario.Clave);
+                    comando.Parameters.AddWithValue("@CodUsuario", usuario.CodUsuario);
+                    comando.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                    comando.Parameters.AddWithValue("@IdRol", usuario.IdRol);
+                    conexion.Open();
+                    usuario.IdUsuario = Convert.ToInt32(comando.ExecuteScalar());
+                    conexion.Close();
+                }
+            }
+            return usuario;
+        }
+
+        public Usuario ModificarUsuario(int IdUsuario, Usuario usuario)
+        {
+            // Usuario SegSSOMUsuario = null;
+            // byte[] UserPass = EncriptacionHelper.EncriptarByte(usuario.ClaveTxt);
+            // usuario.Clave = UserPass;
+
+            using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
+            {
+
+                using (SqlCommand comando = new SqlCommand("paUsuario_Modificar", conexion))
+                {
+                    comando.CommandType = System.Data.CommandType.StoredProcedure;
+                    comando.Parameters.AddWithValue("@IdUsuario", IdUsuario);
+                    comando.Parameters.AddWithValue("@CodUsuario", usuario.CodUsuario);
+                    // comando.Parameters.AddWithValue("@Clave", usuario.Clave);
+                    comando.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                    comando.Parameters.AddWithValue("@IdRol", usuario.IdRol);
+                    conexion.Open();
+                    SqlDataReader reader = comando.ExecuteReader();
+                    conexion.Close();
+                }
+            }
+            return usuario;
+        }
+
+
+        public Usuario BuscaUsuarioId(int pUsuarioId)
+        {
+            Usuario entidad = null;
+            try
+            {
+
+                using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
+                {
+                    using (SqlCommand comando = new SqlCommand("paUsuario_BuscaUserId", conexion))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@ParamUsuario", pUsuarioId);
+                        conexion.Open();
+                        SqlDataReader reader = comando.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            entidad = LlenarEntidad(reader);
+                        }
+                        conexion.Close();
+                    }
+                }
+                return entidad;
+            }
+            catch (Exception ex)
+            {
+                string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
+                //Logger.paginaNombre = this.GetType().Name;
+                //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
+                return entidad;
+            }
+        }
+
+        public void EliminarUsuario(int id)
+        {
+            int returnedVal = 0;
+            using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
+            {
+                using (SqlCommand comando = new SqlCommand("paUsuario_Eliminar", conexion))
+                {
+                    comando.CommandType = CommandType.StoredProcedure;
+                    comando.Parameters.AddWithValue("@IdUsuario", id);
+                    conexion.Open();
+                    //comando.ExecuteNonQuery;
+                    returnedVal = Convert.ToInt32(comando.ExecuteScalar());
+                    conexion.Close();
+                }
+            }
+        }
     }
 
 }
