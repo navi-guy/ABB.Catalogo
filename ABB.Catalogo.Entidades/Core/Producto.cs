@@ -17,7 +17,9 @@ namespace ABB.Catalogo.Entidades.Core
         public string GarantiaProducto { get; set; }
         public decimal Precio { get; set; }
         public byte[] Imagen { get; set; }
+        public string ImagenTxt { get; set; }
         public string DescripcionTecnica { get; set; }
+        public string DesCategoria { get; set; }
 
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ABB.Catalogo.Entidades.Core
 {
-    class Categoria
+    public class Categoria
     {
-        public int IdRol { get; set; }
+        public int IdCategoria { get; set; }
         public string DescCategoria { get; set; }
     }
 }

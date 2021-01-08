@@ -93,6 +93,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
                 {
                     using (SqlCommand comando = new SqlCommand("paUsuario_BuscaCodUserClave", conexion))
                     {
+                        comando.Parameters.Clear();
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.Parameters.AddWithValue("@ParamUsuario", pUsuario);
                         comando.Parameters.AddWithValue("@ParamPass", UserPass);
@@ -123,6 +124,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
             {
                 using (SqlCommand comando = new SqlCommand("paUsuario_insertar", conexion))
                 {
+                    comando.Parameters.Clear();
                     comando.CommandType = System.Data.CommandType.StoredProcedure;
                     comando.Parameters.AddWithValue("@Clave", usuario.Clave);
                     comando.Parameters.AddWithValue("@CodUsuario", usuario.CodUsuario);
@@ -147,6 +149,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
 
                 using (SqlCommand comando = new SqlCommand("paUsuario_Modificar", conexion))
                 {
+                    comando.Parameters.Clear();
                     comando.CommandType = System.Data.CommandType.StoredProcedure;
                     comando.Parameters.AddWithValue("@IdUsuario", IdUsuario);
                     comando.Parameters.AddWithValue("@CodUsuario", usuario.CodUsuario);
@@ -172,6 +175,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
                 {
                     using (SqlCommand comando = new SqlCommand("paUsuario_BuscaUserId", conexion))
                     {
+                        comando.Parameters.Clear();
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.Parameters.AddWithValue("@ParamUsuario", pUsuarioId);
                         conexion.Open();
@@ -201,6 +205,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
             {
                 using (SqlCommand comando = new SqlCommand("paUsuario_Eliminar", conexion))
                 {
+                    comando.Parameters.Clear();
                     comando.CommandType = CommandType.StoredProcedure;
                     comando.Parameters.AddWithValue("@IdUsuario", id);
                     conexion.Open();

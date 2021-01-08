@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ABB.Catalogo.Entidades.Core.Producto>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crear nuevo", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NomProducto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MarcaProducto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModeloProducto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Precio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DesCategoria)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Imagen)
+        </th>
+        <th>Acciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NomProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MarcaProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModeloProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Precio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DesCategoria)
+        </td>
+        <th>
+            <img style='display:block; width:100px;height:100px;' id='base64image' alt="imagenProducto"
+                 src='@(item.ImagenTxt)' />
+        </th>
+        <td>
+            <a class="btn btn-xs btn-warning" href="/Producto/Edit/@(item.IdProducto)">Editar </a>
+            <a class="btn btn-xs btn-info" href="/Producto/Details/@(item.IdProducto)">Detalles </a>
+            <form action="/Producto/Delete/@(item.IdProducto)" method="post">
+                @Html.AntiForgeryToken()
+                <div class="form-actions no-color">
+
+                    <input type="submit" onclick="return confirm('Está seguro de eliminar este producto?');" value="Eliminar" class="btn btn-xs btn-danger" />
+                </div>
+            </form>
+        </td>
+    </tr>
+}
+
+</table>
