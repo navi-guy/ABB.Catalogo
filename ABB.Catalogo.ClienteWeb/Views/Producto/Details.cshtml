@@ -98,6 +98,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.IdProducto }) |
-    @Html.ActionLink("Retornar", "Index")
+    <a class="btn btn-warning" href="/Producto/Edit/@(Model.IdProducto)">Editar </a> |
+    <a class="btn btn-default" href="/Producto/Index/)">Back to List </a>
 </p>

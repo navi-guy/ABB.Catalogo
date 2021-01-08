@@ -67,7 +67,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.DescripcionTecnica, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.DescripcionTecnica, new { htmlAttributes = new { @class = "form-control" } })
+            <textarea name="DescripcionTecnica" class="form-control" id="editor" rows="5" cols="80">@(Model.DescripcionTecnica)
+            </textarea>
             @Html.ValidationMessageFor(model => model.DescripcionTecnica, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -92,14 +93,14 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Crear" class="btn btn-primary" />
         </div>
     </div>
 </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <a class="btn btn-default" href="/Producto/Index/)">Back to List </a>
 </div>
 
 @section Scripts {
