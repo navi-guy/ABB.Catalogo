@@ -40,6 +40,7 @@
                 @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
             </div>
         </div>
+
         <div class="form-group">
             <label for="txt1" class="control-label col-md-2">
                 Rol:
@@ -47,7 +48,7 @@
             <div class="col-md-10">
                 @Html.DropDownListFor(Model => Model.IdRol,
                new SelectList(ViewBag.listaRoles, "IdRol", "DesRol"),
-               htmlAttributes: new { @id = "ddlRol", @class = "form-control input-sm"})
+               htmlAttributes: new { @id = "IdRol", @class = "form-control input-sm"})
             </div>
         </div>
 

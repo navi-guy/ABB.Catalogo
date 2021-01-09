@@ -12,22 +12,24 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.IdUsuario)
+            <label for="txt1" class="control-label col-md-2">
+                ID
+            </label>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CodUsuario)
+            <label for="txt1" class="control-label col-md-2">
+                CODIGO
+            </label>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ClaveTxt)
+            <label for="txt1" class="control-label col-md-2">
+                NOMBRES
+            </label>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Nombres)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IdRol)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DesRol)
+            <label for="txt1" class="control-label col-md-2">
+                ROL
+            </label>
         </th>
         <th></th>
     </tr>
@@ -41,21 +43,15 @@
             @Html.DisplayFor(modelItem => item.CodUsuario)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ClaveTxt)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Nombres)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IdRol)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DesRol)
         </td>
         <td>
             @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario }) |
-            @Html.ActionLink("Details", "Details", new {id =item.IdUsuario }) |
-            @Html.ActionLink("Delete", "Delete", new {  id=item.IdUsuario })
+            @Html.ActionLink("Delete", "Delete", new {  id=item.IdUsuario }) |
+            @*@Html.ActionLink("Cambiar contraseña", "CambioClave", new {  id=item.IdUsuario })*@
         </td>
     </tr>
 }

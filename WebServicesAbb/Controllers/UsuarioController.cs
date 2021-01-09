@@ -16,7 +16,6 @@ namespace WebServicesAbb.Controllers
             usuarios = new UsuarioLN().ListarUsuarios();
 
             return usuarios;
-
         }
 
         // GET: api/Usuarios/5
@@ -34,7 +33,6 @@ namespace WebServicesAbb.Controllers
                 //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
                 return -1;
             }
-
         }
 
         // POST: api/Usuarios
@@ -44,17 +42,17 @@ namespace WebServicesAbb.Controllers
         }
 
         // PUT: api/Usuarios/5
-        public void Put(int id, [FromBody]Usuario value)
+        public Usuario Put(int id, [FromBody]Usuario value)
         {
             Usuario usuario = new Usuario();
             usuario = new UsuarioLN().ModificarUsuario(id, value);
-
+            return usuario;
         }
-
 
         // DELETE: api/Usuarios/5
         public void Delete(int id)
         {
+            new UsuarioLN().EliminarUsuario(id);
         }
 
         public Usuario GetUserId([FromUri] int IdUsuario)
@@ -70,6 +68,23 @@ namespace WebServicesAbb.Controllers
                 //Logger.paginaNombre = this.GetType().Name;
                 //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
                 throw;
+            }
+        }
+
+        //[HttpPut("cambiar/{pUsuario}/{pOldPass}/{pn")]
+        //[Route("cambiar/{pUsuario}/{pOldPass}/{pNewPass}")]
+        [HttpPut]
+        public void CambioClave(int pUsuario, string pOldPass, string pNewPass)
+        {
+            try
+            {
+                new UsuarioLN().CambioClave(pUsuario, pOldPass, pNewPass);
+            }
+            catch (Exception ex)
+            {
+                string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
+                //Logger.paginaNombre = this.GetType().Name;
+                //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
             }
         }
     }

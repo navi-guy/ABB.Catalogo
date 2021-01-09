@@ -6,7 +6,7 @@ namespace ABB.Catalogo.Entidades.Core
 {
     public class Categoria
     {
-        public int IdRol { get; set; }
+        public int IdCategoria { get; set; }
         public string DescCategoria { get; set; }
     }
 }

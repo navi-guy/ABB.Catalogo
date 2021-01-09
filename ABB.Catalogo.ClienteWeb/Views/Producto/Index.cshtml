@@ -1,0 +1,96 @@
+﻿@model IEnumerable<ABB.Catalogo.Entidades.Core.Producto>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Agregar producto", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                ID
+            </label>
+        </th>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                CATEGORIA
+            </label>
+        </th>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                PRODUCTO
+            </label>
+        </th>
+        <th>
+
+            <label for="txt1" class="control-label col-md-2">
+                MARCA
+            </label>
+        </th>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                MODELO
+            </label>
+        </th>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                LINEA
+            </label>
+        </th>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                GARANTIA
+            </label>
+        </th>
+        <th>
+            <label for="txt1" class="control-label col-md-2">
+                PRECIO
+            </label>
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IdProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DescCategoria)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NomProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MarcaProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModeloProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LineaProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GarantiaProducto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Precio)
+        </td>
+        @*<th>
+            <img style='display:block; width:100px;height:100px;' id='base64image' alt="imagenProducto"
+                 src='@(item.ImagenTxt)' />
+        </th>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.IdProducto }) |
+            @Html.ActionLink("Details", "Details", new { id = item.IdProducto }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.IdProducto })
+        </td>
+    </tr>
+    }
+
+</table>

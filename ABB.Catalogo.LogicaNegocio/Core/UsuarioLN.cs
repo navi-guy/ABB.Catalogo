@@ -1,11 +1,8 @@
-﻿using ABB.Catalogo.Entidades.Core;
-using ABB.Catalogo.AccesoDatos.Core;
+﻿using ABB.Catalogo.AccesoDatos.Core;
+using ABB.Catalogo.Entidades.Base;
+using ABB.Catalogo.Entidades.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ABB.Catalogo.Entidades.Base;
 
 
 namespace ABB.Catalogo.LogicaNegocio.Core
@@ -89,5 +86,33 @@ namespace ABB.Catalogo.LogicaNegocio.Core
             }
         }
 
+        public void EliminarUsuario(int id)
+        {
+            try
+            {
+                new UsuarioDA().EliminarUsuario(id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                throw;
+            }
+        }
+
+        public int CambioClave(int pUsuario, string pOldPass, string pNewPass)
+        {
+            try
+            {
+                UsuarioDA usuario = new UsuarioDA();
+                return usuario.CambioClave(pUsuario, pOldPass, pNewPass);
+            }
+            catch (Exception ex)
+            {
+                string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
+                //Logger.paginaNombre = this.GetType().Name;
+                //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
+                return -1;
+            }
+        }
     }
 }

@@ -64,6 +64,8 @@ namespace ABB.Catalogo.AccesoDatos.Core
 
             return usuario;
         }
+
+
         public List<Usuario> ListarUsuarios()
         {
             List<Usuario> ListaEntidad = new List<Usuario>();
@@ -85,6 +87,8 @@ namespace ABB.Catalogo.AccesoDatos.Core
             }
             return ListaEntidad;
         }
+
+
         public int GetUsuarioId(string pUsuario, string pPassword)
         {
             try
@@ -103,9 +107,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
                         returnedVal = Convert.ToInt32(comando.ExecuteScalar());
                         conexion.Close();
                     }
-
                 }
-
                 return Convert.ToInt32(returnedVal);
             }
             catch (Exception ex)
@@ -127,7 +129,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
                 using (SqlCommand comando = new SqlCommand("paUsuario_insertar", conexion))
                 {
                     comando.CommandType = System.Data.CommandType.StoredProcedure;
-                    comando.Parameters.AddWithValue("@ClaveTxt", usuario.ClaveTxt);
+                    comando.Parameters.AddWithValue("@Clave", usuario.Clave);
                     comando.Parameters.AddWithValue("@CodUsuario", usuario.CodUsuario);
                     comando.Parameters.AddWithValue("@Nombres", usuario.Nombres);
                     comando.Parameters.AddWithValue("@IdRol", usuario.IdRol);
@@ -143,27 +145,23 @@ namespace ABB.Catalogo.AccesoDatos.Core
         public Usuario ModificarUsuario(int id, Usuario usuario)
         {
             Usuario SegSSOMUsuario = null;
-            byte[] UserPass = EncriptacionHelper.EncriptarByte(usuario.ClaveTxt);
-            usuario.Clave = UserPass;
+            //byte[] UserPass = EncriptacionHelper.EncriptarByte(usuario.ClaveTxt);
+            //usuario.Clave = UserPass;
 
             using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
             {
-                
+
                 using (SqlCommand comando = new SqlCommand("paUsuario_Modificar", conexion))
                 {
                     comando.CommandType = System.Data.CommandType.StoredProcedure;
                     comando.Parameters.AddWithValue("@IdUsuario", id);
                     comando.Parameters.AddWithValue("@CodUsuario", usuario.CodUsuario);
-                    comando.Parameters.AddWithValue("@Clave", usuario.Clave);
+                    //comando.Parameters.AddWithValue("@Clave", usuario.Clave);
                     comando.Parameters.AddWithValue("@Nombres", usuario.Nombres);
                     comando.Parameters.AddWithValue("@IdRol", usuario.IdRol);
                     conexion.Open();
                     SqlDataReader reader = comando.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        SegSSOMUsuario = LlenarEntidad(reader);
-
-                    }
+                   
 
                     conexion.Close();
                 }
@@ -203,6 +201,53 @@ namespace ABB.Catalogo.AccesoDatos.Core
             }
         }
 
-    }
+        public void EliminarUsuario(int id)
+        {
+            int returnedVal = 0;
+            using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
+            {
+                using (SqlCommand comando = new SqlCommand("paUsuario_Eliminar", conexion))
+                {
+                    comando.CommandType = CommandType.StoredProcedure;
+                    comando.Parameters.AddWithValue("@IdUsuario", id);
+                    conexion.Open();
+                    //comando.ExecuteNonQuery;
+                    returnedVal = Convert.ToInt32(comando.ExecuteScalar());
+                    conexion.Close();
+                }
+            }
+        }
 
+        public int CambioClave(int pUsuario, string pOldPass, string pNewPass)
+         {
+             try
+             {
+                 //  string UserPass = Utilitario.GetMd5Hash2(pPassword);
+                 byte[] UserPass1 = EncriptacionHelper.EncriptarByte(pOldPass);
+                 byte[] UserPass2 = EncriptacionHelper.EncriptarByte(pNewPass);
+                 int returnedVal = 0;
+                 using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
+                 {
+                     using (SqlCommand comando = new SqlCommand("paUsuario_CambioPass", conexion))
+                     {
+                         comando.CommandType = CommandType.StoredProcedure;
+                         comando.Parameters.AddWithValue("@IdUsuario", pUsuario);
+                         comando.Parameters.AddWithValue("@OldPass", UserPass1);
+                         comando.Parameters.AddWithValue("@NewPass", UserPass1);
+                         conexion.Open();
+                         returnedVal = Convert.ToInt32(comando.ExecuteScalar());
+                         conexion.Close();
+                     }
+                 }
+                 return Convert.ToInt32(returnedVal);
+             }
+             catch (Exception ex)
+             {
+                 string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
+                 //Logger.paginaNombre = this.GetType().Name;
+                 //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " + ex.StackTrace + ". " + innerException);
+                 return -1;
+             }
+         }
+    }
 }

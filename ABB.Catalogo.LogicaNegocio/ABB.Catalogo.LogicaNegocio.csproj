@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\CategoriaLN.cs" />
+    <Compile Include="Core\ProductoLN.cs" />
     <Compile Include="Core\RolLN.cs" />
     <Compile Include="Core\UsuarioLN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
