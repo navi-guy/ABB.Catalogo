@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using WebServicesAbb.Filters;
 
 namespace WebServicesApp
 {
@@ -13,12 +14,13 @@ namespace WebServicesApp
 
             // Rutas de API web
             config.MapHttpAttributeRoutes();
-
+            
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            config.MessageHandlers.Add(new FIlterJWT());
         }
     }
 }

@@ -10,6 +10,7 @@ using ABB.Catalogo.LogicaNegocio.Core;
 
 namespace WebServicesApp.Controllers
 {
+    [Authorize]
     public class ProductosController : ApiController
     {
         // GET: api/Productos
@@ -20,38 +21,20 @@ namespace WebServicesApp.Controllers
             return productos;
         }
 
-        // GET: api/Productos/5
-        public string Get(int id)
+        // GET: api/Productos/{idProducto}
+        public IHttpActionResult GetUserId([FromUri] int IdProducto)
         {
-            return "value";
-        }
 
-        // POST: api/Productos
-        public void Post([FromBody]Producto value)
-        {
-            Producto usuario = new ProductoLN().InsertarProducto(value);
-        }
-
-        // PUT: api/Productos/5
-        public Producto Put(int id, [FromBody]Producto value)
-        {
-            Producto producto = new Producto();
-            producto = new ProductoLN().ModificarProducto(id, value);
-            return producto;
-        }
-
-        // DELETE: api/Productos/5
-        public void Delete(int id)
-        {
-            new ProductoLN().EliminarProducto(id);
-        }
-
-        public Producto GetUserId([FromUri] int IdProducto)
-        {
+            if (IdProducto <= 0)
+            {
+                return BadRequest("el Id debe ser mayor que 0");
+            }
             try
             {
+                Producto prod = new Producto();
                 ProductoLN producto = new ProductoLN();
-                return producto.BuscaProductoId(IdProducto);
+                prod = producto.BuscaProductoId(IdProducto);
+                return Ok(prod);
             }
             catch (Exception ex)
             {
@@ -61,5 +44,56 @@ namespace WebServicesApp.Controllers
                 throw;
             }
         }
+
+        // POST: api/Productos
+        public IHttpActionResult Post([FromBody]Producto value)
+        {
+            if (value.IdCategoria <= 0)
+            {
+                return BadRequest("IdCategoria es nulo");
+            }
+            if (value.NomProducto == null)
+            {
+                return BadRequest("NomProducto es nulo");
+            }
+            if (value.MarcaProducto == null)
+            {
+                return BadRequest("MarcaProducto es nulo");
+            }
+            if (value.ModeloProducto == null)
+            {
+                return BadRequest("ModeloProducto es nulo");
+            }
+            if (value.LineaProducto == null)
+            {
+                return BadRequest("LineaProducto es nulo");
+            }
+            Producto producto = new ProductoLN().InsertarProducto(value);
+            return Ok(producto);
+        }
+
+        // PUT: api/Productos/5
+        public IHttpActionResult Put(int id, [FromBody]Producto value)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("IdProducto es nulo");
+            }
+            Producto producto = new Producto();
+            producto = new ProductoLN().ModificarProducto(id, value);
+            return Ok(producto);
+        }
+
+        // DELETE: api/Productos/5
+        public IHttpActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("IdProducto es nulo");
+            }
+            new ProductoLN().EliminarProducto(id);
+            return Ok();
+        }
+
     }
 }
