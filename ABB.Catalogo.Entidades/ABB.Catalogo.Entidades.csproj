@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Binarios\System.Web.Mvc.dll</HintPath>
@@ -51,10 +52,13 @@
     <Compile Include="Base\BaseLN.cs" />
     <Compile Include="Core\Categoria.cs" />
     <Compile Include="Core\Clave.cs" />
+    <Compile Include="Core\CustomError.cs" />
     <Compile Include="Core\Producto.cs" />
     <Compile Include="Core\Rol.cs" />
     <Compile Include="Core\Stock.cs" />
+    <Compile Include="Core\TokenResponse.cs" />
     <Compile Include="Core\Usuario.cs" />
+    <Compile Include="Core\UsuarioApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,14 +1,13 @@
 ﻿using ABB.Catalogo.Entidades.Core;
 using ABB.Catalogo.LogicaNegocio.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Configuration;
 using System.Net;
-using System.Text;
-using Newtonsoft.Json;
 using System.Net.Http;
+using System.Text;
+using System.Web.Mvc;
 //using System.Web.Http;
 
 namespace ABB.Catalogo.ClienteWeb.Controllers
@@ -19,15 +18,24 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
         string jsonMediaType = "application/json"; // define el tipo de dat
 
         // GET: Usuarios
+
         public ActionResult Index()
         {
             string controladora = "Usuario";
             string metodo = "Get";
+
+            TokenResponse tokenrsp = new TokenResponse();
+            //llamada al web Api de Autorizacion.
+            tokenrsp = Respuest();
+
             List<Usuario> listausuarios = new List<Usuario>();
 
             using (WebClient usuario = new WebClient())
             {
                 usuario.Headers.Clear();//borra datos anteriores
+
+                usuario.Headers[HttpRequestHeader.Authorization] = "Bearer " + tokenrsp.Token;
+
                 usuario.Headers[HttpRequestHeader.ContentType] = jsonMediaType;    //establece el tipo de dato de tranferencia
                 usuario.Encoding = UTF8Encoding.UTF8; //typo de decodificador reconocimiento carecteres especiales
                 string rutacompleta = RutaApi + controladora;
@@ -65,9 +73,13 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
             try
             {
                 // TODO: Add insert logic here
-                using (HttpClient usuario = new HttpClient())
+                using (WebClient usuario = new WebClient())
                 {
-                    usuario.BaseAddress = new Uri(RutaApi + controladora);
+                    TokenResponse tokenrsp = new TokenResponse();
+                    //llamada al web Api de Autorizacion.
+                    tokenrsp = Respuest();
+                    #region
+                    /*usuario.BaseAddress = new Uri(RutaApi + controladora);
 
                     var postTask = usuario.PostAsJsonAsync<Usuario>("usuario", collection);
                     postTask.Wait();
@@ -76,17 +88,18 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
                     if (result.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
-                    }
-                    #region
-                    /* usuario.Headers.Clear();//borra datos anteriores
-                     usuario.Headers[HttpRequestHeader.ContentType] = jsonMediaType;  //establece el tipo de dato de tranferencia
-                     usuario.Encoding = UTF8Encoding.UTF8; //typo de decodificador reconocimiento carecteres especiales
-                     var usuarioJson = JsonConvert.SerializeObject(collection); //convierte el objeto de tipo Usuarios a una trama Json
-                     string rutacompleta = RutaApi + controladora;
-                     var resultado = usuario.UploadString(new Uri(rutacompleta), usuarioJson);*/
+                    }*/
                     #endregion
-                }
+                    usuario.Headers.Clear();//borra datos anteriores
 
+                    usuario.Headers[HttpRequestHeader.Authorization] = "Bearer " + tokenrsp.Token;
+                    
+                    usuario.Headers[HttpRequestHeader.ContentType] = jsonMediaType;  //establece el tipo de dato de tranferencia
+                    usuario.Encoding = UTF8Encoding.UTF8; //typo de decodificador reconocimiento carecteres especiales
+                    var usuarioJson = JsonConvert.SerializeObject(collection); //convierte el objeto de tipo Usuarios a una trama Json
+                    string rutacompleta = RutaApi + controladora;
+                    var resultado = usuario.UploadString(new Uri(rutacompleta), usuarioJson);
+                }
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -94,16 +107,24 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
                 return View();
             }
         }
-        
+
         public ActionResult Edit(int id)
         {
             UsuarioController uc = new UsuarioController();
             string controladora = "Usuario";
             //string metodo = "GetUserId";
+
+            TokenResponse tokenrsp = new TokenResponse();
+            //llamada al web Api de Autorizacion.
+            tokenrsp = Respuest();
+
             Usuario users = new Usuario();
             using (WebClient usuario = new WebClient())
             {
                 usuario.Headers.Clear();//borra datos anteriores
+
+                usuario.Headers[HttpRequestHeader.Authorization] = "Bearer " + tokenrsp.Token;
+
                 usuario.Headers[HttpRequestHeader.ContentType] = jsonMediaType; //establece el tipo de dato de tranferencia
                 usuario.Encoding = UTF8Encoding.UTF8; //typo de decodificador reconocimiento carecteres especiales
 
@@ -111,7 +132,7 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
                 var data = usuario.DownloadString(new Uri(rutacompleta));
 
                 users = JsonConvert.DeserializeObject<Usuario>(data); // convierte los datos traidos por la api a tipo lista de usuarios
-                
+
                 List<Rol> listaRol = new List<Rol>();
                 listaRol = new RolLN().ListaRol();
                 listaRol.Add(new Rol() { IdRol = 0, DesRol = "Selecciona rol" });
@@ -126,12 +147,24 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
         public ActionResult Edit(int id, Usuario collection)
         {
             string controladora = "Usuario";
+
+            collection.IdUsuario = id;
+            collection.ClaveTxt = "";
+            collection.Clave = null;
+            collection.DesRol = "";
+
+            string metodo = "Put";
+            TokenResponse tokenrsp = new TokenResponse();
+
             try
             {
-                using (WebClient usuario = new WebClient())
+                //llamada al web Api de Autorizacion.
+                tokenrsp = Respuest();
+                #region
+                /*using (WebClient usuario = new WebClient())
                 {
                     #region
-                    /*usuario.BaseAddress = new Uri(RutaApi + controladora + "/" + id);
+                    usuario.BaseAddress = new Uri(RutaApi + controladora + "/" + id);
                     collection.ClaveTxt = "";
                     var putTask = usuario.PuttAsJsonAsync<Usuario>("usuario", collection);
                     putTask.Wait();
@@ -140,7 +173,7 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
                     if (result.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
-                    }*/
+                    }
                     #endregion
 
                     usuario.Headers.Clear();//borra datos anteriores
@@ -149,11 +182,28 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
                     usuario.Encoding = UTF8Encoding.UTF8; //typo de decodificador reconocimiento carecteres especiales
                     //collection.ClaveTxt = "";
                     var usuarioJson = JsonConvert.SerializeObject(collection); //convierte el objeto de tipo Usuarios a una trama Json
-                    string rutacompleta = RutaApi + controladora +"/" + id;
+                    string rutacompleta = RutaApi + controladora + "/" + id;
                     var resultado = usuario.UploadString(new Uri(rutacompleta), "PUT", usuarioJson);
-                }
+                }*/
+                #endregion
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Clear();
+                    //client.DefaultRequestHeaders.Add("token", "Bearer " + tokenrsp.Token);
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenrsp.Token);
+                    client.BaseAddress = new Uri(RutaApi);
+                    string rutacompleta = RutaApi + controladora + "/" + id;
+                    // var putTask = client.PutAsJsonAsync($"Usuarios/{collection.IdUsuario}", collection);
+                    var putTask = client.PutAsJsonAsync(rutacompleta, collection);
+                    putTask.Wait();
+                    var result = putTask.Result;
 
-                return RedirectToAction("Index");
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    return RedirectToAction("Index");
+                }
             }
             catch (Exception ex)
             {
@@ -162,48 +212,70 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
                 listaRol = new RolLN().ListaRol();
                 listaRol.Add(new Rol() { IdRol = 0, DesRol = "Selecciona rol" });
                 ViewBag.listaRoles = listaRol;
-                return View();
+                var msg = ex.Message;
+                return RedirectToAction("Index");
             }
         }
 
-        // GET: Usuarios/Delete/5
+        // GET: Usuario/Delete/5
         public ActionResult Delete(int id)
         {
-            UsuarioController uc = new UsuarioController();
             string controladora = "Usuario";
-            //string metodo = "GetUserId";
             Usuario users = new Usuario();
-            using (HttpClient usuario = new HttpClient())
+
+            TokenResponse tokenrsp = new TokenResponse();
+            //llamada al web Api de Autorizacion.
+            tokenrsp = Respuest();
+            //llamada al Web Api para listar Usuarios.
+
+            using (WebClient usuario = new WebClient())
             {
-                usuario.BaseAddress = new Uri(RutaApi + controladora + "/" + id);
+                usuario.Headers.Clear();//borra datos anteriores
+                usuario.Headers[HttpRequestHeader.Authorization] = "Bearer " + tokenrsp.Token;
+                //establece el tipo de dato de tranferencia
+                usuario.Headers[HttpRequestHeader.ContentType] = jsonMediaType;
+                //typo de decodificador reconocimiento carecteres especiales
+                usuario.Encoding = UTF8Encoding.UTF8;
+                string rutacompleta = RutaApi + controladora + "?IdUsuario=" + id;
+                //ejecuta la busqueda en la web api usando metodo GET
+                var data = usuario.DownloadString(new Uri(rutacompleta));
 
-                //HTTP DELETE
-                var deleteTask = usuario.DeleteAsync(id.ToString());
-                deleteTask.Wait();
-
-                var result = deleteTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-
-                    return RedirectToAction("Index");
-                }
+                // convierte los datos traidos por la api a tipo lista de usuarios
+                users = JsonConvert.DeserializeObject<Usuario>(data);
             }
-                return View();
+
+            return View(users);
         }
 
-        // POST: Usuarios/Delete/5
-        /* [HttpPost]
-        public ActionResult Delete(Usuario collection)
-         {
-             try
-             {
-                 return RedirectToAction("Index");
-             }
-             catch
-             {
-                 return View();
-             }
-         }*/
+        // POST: Usuario/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            string controladora = "Usuario";
+            TokenResponse tokenrsp = new TokenResponse();
+            //llamada al web Api de Autorizacion.
+            tokenrsp = Respuest();
+            //llamada al Web Api para listar Usuarios.
+            try
+            {
+                using (WebClient usuario = new WebClient())
+                {
+                    usuario.Headers.Clear();//borra datos anteriores
+                    usuario.Headers[HttpRequestHeader.Authorization] = "Bearer " + tokenrsp.Token;
+                    usuario.Headers[HttpRequestHeader.ContentType] = jsonMediaType;
+                    usuario.Encoding = UTF8Encoding.UTF8;
+                    var usuarioJson = JsonConvert.SerializeObject(collection);
+                    string rutacompleta = RutaApi + controladora + "/" + id;
+                    var resultado = usuario.UploadString(new Uri(rutacompleta), "DELETE", usuarioJson);
+                }
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+        }
+
         #region
         public ActionResult CambioClave(int id)
         {
@@ -245,5 +317,30 @@ namespace ABB.Catalogo.ClienteWeb.Controllers
             }
         }
         #endregion
+
+        private TokenResponse Respuest()
+        {
+            TokenResponse respuesta = new TokenResponse();
+            string controladora = "Auth";
+            string metodo = "Post";
+            var resultado = "";
+            UsuarioApi usuapi = new UsuarioApi();
+            usuapi.Codigo = Convert.ToInt32(ConfigurationManager.AppSettings["UsuApiCodigo"]);
+            usuapi.UserName = ConfigurationManager.AppSettings["UsuApiUserName"];
+            usuapi.Clave = ConfigurationManager.AppSettings["UsuApiClave"];
+            usuapi.Nombre = ConfigurationManager.AppSettings["UsuApiNombre"];
+            usuapi.Rol = ConfigurationManager.AppSettings["UsuApiRol"];
+            using (WebClient usuarioapi = new WebClient())
+            {
+                usuarioapi.Headers.Clear();//borra datos anteriores
+                usuarioapi.Headers[HttpRequestHeader.ContentType] = jsonMediaType; //establece el tipo de dato de tranferencia
+                usuarioapi.Encoding = UTF8Encoding.UTF8; //typo de decodificador reconocimiento carecteres especiales
+                var usuarioJson = JsonConvert.SerializeObject(usuapi); //convierte el objeto de tipo Usuarios a una trama Json
+                string rutacompleta = RutaApi + controladora;
+                resultado = usuarioapi.UploadString(new Uri(rutacompleta), usuarioJson);
+                respuesta = JsonConvert.DeserializeObject<TokenResponse>(resultado);
+            }
+            return respuesta;
+        }
     }
 }

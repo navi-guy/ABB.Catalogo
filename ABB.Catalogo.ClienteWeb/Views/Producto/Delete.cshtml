@@ -1,11 +1,12 @@
 ﻿@model ABB.Catalogo.Entidades.Core.Producto
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Delete";
 }
 
-<h2>Details</h2>
+<h2>Delete</h2>
 
+<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Producto</h4>
     <hr />
@@ -83,6 +84,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.ImagenTxt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImagenTxt)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.DescripcionTecnica)
         </dt>
 
@@ -90,21 +99,14 @@
             @Html.DisplayFor(model => model.DescripcionTecnica)
         </dd>
 
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Imagen)
-        </dt>
-
-        <dd>
-            @if (Model.ImagenTxt != "" || Model.ImagenTxt != null)
-            {
-                <img style='display:block; width:100px;height:100px;' id='base64image' alt="imagenProducto"
-                     src='@(Model.ImagenTxt)' />
-            }
-        </dd>*@
-
     </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
 </div>
-<p>
-    @Html.ActionLink("Editar", "Edit", new {  id = Model.IdProducto }) |
-    @Html.ActionLink("Retornar", "Index")
-</p>

@@ -22,6 +22,7 @@ namespace WebServicesAbb.Controllers
         }
 
         // GET: api/Producto/5
+        [HttpGet]
         public Producto GetProductoId([FromUri] int IdProducto)
         {
             try
@@ -39,12 +40,14 @@ namespace WebServicesAbb.Controllers
         }
 
         // POST: api/Producto
+        [HttpPost]
         public void Post([FromBody] Producto value)
         {
             Producto producto = new ProductoLN().InsertarProducto(value);
         }
 
         // PUT: api/Producto/5
+        [HttpPut]
         public Producto Put(int id, [FromBody] Producto value)
         {
             Producto producto = new ProductoLN().ModificarProducto(id, value);
@@ -52,6 +55,7 @@ namespace WebServicesAbb.Controllers
         }
 
         // DELETE: api/Producto/5
+        [HttpDelete]
         public void Delete(int id)
         {
             new ProductoLN().EliminarProducto(id);

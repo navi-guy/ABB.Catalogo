@@ -153,10 +153,10 @@ namespace ABB.Catalogo.AccesoDatos.Core
 
         public Producto InsertarProducto(Producto producto)
         {
-            byte[] bytes = Convert.FromBase64String(producto.ImagenTxt);
-            producto.Imagen = bytes;
-            Debug.WriteLine("Tamaño Array ");
-            Debug.WriteLine(bytes.Length);
+            //byte[] bytes = Convert.FromBase64String(producto.ImagenTxt);
+            //producto.Imagen = bytes;
+            //Debug.WriteLine("Tamaño Array ");
+            //Debug.WriteLine(bytes.Length);
             using (SqlConnection conexion = new SqlConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["cnnSql"]].ConnectionString))
             {
                 using (SqlCommand comando = new SqlCommand("paProducto_insertar", conexion))
@@ -169,7 +169,7 @@ namespace ABB.Catalogo.AccesoDatos.Core
                     comando.Parameters.AddWithValue("@pLineaProducto", producto.LineaProducto);
                     comando.Parameters.AddWithValue("@pGarantiaProducto", producto.GarantiaProducto);
                     comando.Parameters.AddWithValue("@pPrecio", producto.Precio);
-                    comando.Parameters.AddWithValue("@pImagen", producto.Imagen);
+                    //comando.Parameters.AddWithValue("@pImagen", producto.Imagen);
                     comando.Parameters.AddWithValue("@pDescripcion", producto.DescripcionTecnica);
 
                     conexion.Open();

@@ -6,6 +6,7 @@ using System.Web.Http;
 
 namespace WebServicesAbb.Controllers
 {
+    [Authorize]
     public class UsuarioController : ApiController
     {
         // GET: api/Usuario
@@ -19,6 +20,7 @@ namespace WebServicesAbb.Controllers
         }
 
         // GET: api/Usuarios/5
+        [HttpGet]
         public int Get([FromUri] string pUsuario, [FromUri] string pPassword)
         {
             try
@@ -36,12 +38,14 @@ namespace WebServicesAbb.Controllers
         }
 
         // POST: api/Usuarios
+        [HttpPost]
         public void Post([FromBody] Usuario value)
         {
             Usuario usuario = new UsuarioLN().InsertarUsuario(value);
         }
 
         // PUT: api/Usuarios/5
+        [HttpPut]
         public Usuario Put(int id, [FromBody]Usuario value)
         {
             Usuario usuario = new Usuario();
@@ -50,11 +54,13 @@ namespace WebServicesAbb.Controllers
         }
 
         // DELETE: api/Usuarios/5
+        [HttpDelete]
         public void Delete(int id)
         {
             new UsuarioLN().EliminarUsuario(id);
         }
 
+        [HttpGet]
         public Usuario GetUserId([FromUri] int IdUsuario)
         {
             try
